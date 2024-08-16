@@ -47,6 +47,8 @@ SUPPORTED_COLORS = ",".join(color_codes.keys())
 # Generate a random color
 COLOR = random.choice(["red", "green", "blue", "blue2", "darkblue", "pink", "lime"])
 
+# Log the background image URL when the application starts
+print(f"Background image URL: {IMAGE_URL}")
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
