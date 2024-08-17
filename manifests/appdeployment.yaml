@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-deployment
+  namespace: final
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webapp
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      containers:
+        - name: app-container
+          image: 337983077566.dkr.ecr.us-east-1.amazonaws.com/webapp-and-db-repository:webapp-v0.2
+          ports:
+            - containerPort: 81
+          env:
+            - name: DBHOST
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: DBHOST
+            - name: DBPORT
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: DBPORT
+            - name: DBUSER
+              valueFrom:
+                secretKeyRef:
+                  name: db-secrets
+                  key: MYSQL_USERNAME
+            - name: DBPWD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secrets
+                  key: MYSQL_PASSWORD
+            - name: IMAGE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: IMAGE_URL
+            - name: NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: NAME
+            - name: SLOGAN
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: SLOGAN
+      imagePullSecrets:
+        - name: ecr-registry-secret
